@@ -6,11 +6,12 @@
         "corejs": "3.0.0",
         "modules": "commonjs",
         "targets": {
-          "node": "current"
+          "browsers": ["since 2013"]
         },
         "useBuiltIns": "usage"
       }
-    ]
+    ],
+    "@babel/preset-react"
   ],
   "plugins": [
     "@babel/plugin-proposal-class-properties",

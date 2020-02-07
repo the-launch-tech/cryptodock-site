@@ -1,0 +1,62 @@
+{
+  "name": "cryptodock-site",
+  "version": "1.0.0",
+  "description": "Site for Cryptodock",
+  "main": "dist/server.js",
+  "scripts": {
+    "dev": "export NODE_ENV=development&&  npm-run-all --parallel d:*",
+    "d:dist": "webpack --config webpack.config.dist.js --watch",
+    "d:public": "webpack --config webpack.config.public.js --watch",
+    "d:start": "nodemon --watch build --exec \"node dist/server.js\"",
+    "prod": "export NODE_ENV=development&&  npm-run-all --parallel p:*",
+    "p:dist": "webpack --config webpack.config.dist.prod.js --watch",
+    "p:public": "webpack --config webpack.config.public.prod.js --watch",
+    "p:start": "nodemon --watch build --exec \"node dist/server.js\""
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/the-launch-tech/cryptodock-site.git"
+  },
+  "author": "Daniel Griffiths",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/the-launch-tech/cryptodock-site/issues"
+  },
+  "homepage": "https://github.com/the-launch-tech/cryptodock-site#readme",
+  "devDependencies": {
+    "@babel/core": "^7.8.4",
+    "@babel/plugin-proposal-class-properties": "^7.8.3",
+    "@babel/plugin-transform-runtime": "^7.8.3",
+    "@babel/preset-env": "^7.8.4",
+    "@babel/preset-react": "^7.8.3",
+    "autoprefixer": "^9.7.4",
+    "babel-loader": "^8.0.6",
+    "css-loader": "^3.4.2",
+    "file-loader": "^5.0.2",
+    "mini-css-extract-plugin": "^0.9.0",
+    "node-sass": "^4.13.1",
+    "nodemon": "^2.0.2",
+    "npm-run-all": "^4.1.5",
+    "optimize-css-assets-webpack-plugin": "^5.0.3",
+    "postcss-cli": "^7.1.0",
+    "postcss-loader": "^3.0.0",
+    "sass-loader": "^8.0.2",
+    "tailwindcss": "^1.2.0",
+    "tailwindcss-transitions": "^2.2.0",
+    "terser-webpack-plugin": "^2.3.4",
+    "webpack": "^4.41.5",
+    "webpack-node-externals": "^1.2.0"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.8.4",
+    "core-js": "^3.6.4",
+    "dotenv": "^8.2.0",
+    "express": "^4.14.0",
+    "express-http-proxy": "^1.6.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0",
+    "react-helmet": "^6.0.0-beta.2",
+    "regenerator-runtime": "^0.13.3",
+    "webpack-cli": "^3.3.10"
+  }
+}

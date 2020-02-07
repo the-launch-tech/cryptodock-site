@@ -1,3 +1,7 @@
 /node_modules
 /build
-/src/assets/styles/_tailwind.scss
+/client/src/assets/styles/_tailwind.scss
+/client/package-lock.json
+/.client
+.env
+package-lock.json

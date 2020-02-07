@@ -1,48 +1,60 @@
 {
-  "name": "cryptodock-site",
+  "name": "cryptodock-site--server",
   "version": "1.0.0",
-  "description": "Landing page for CryptoDock.",
-  "main": "build/index.js",
+  "description": "Server side for CryptoDock site.",
+  "main": "index.js",
+  "bin": {
+    "cryptodock": "bin/index.js"
+  },
   "scripts": {
-    "start": "webpack --mode development",
-    "dev": "webpack-dev-server --mode development --open",
-    "build": "webpack --mode production"
+    "dev": "export NODE_ENV=development&&  npm-run-all --parallel development:*",
+    "prod": "export NODE_ENV=production&&  npm-run-all --parallel production:*",
+    "development:build-server": "webpack --config webpack.config.js --watch",
+    "development:server": "nodemon --watch dist --exec \"node dist/index.js\"",
+    "development:client": "npm run development_client --prefix ./client",
+    "production:build-server": "webpack --config webpack.config.prod.js --watch",
+    "production:server": "nodemon --watch dist --exec \"node dist/index.js\"",
+    "production:client": "npm run production_client --prefix ./client"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/the-launch-tech/cryptodock-site.git"
   },
   "author": "Daniel Griffiths",
   "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/the-launch-tech/cryptodock-site/issues"
+  },
+  "homepage": "https://github.com/the-launch-tech/cryptodock-site#readme",
   "devDependencies": {
+    "@babel/cli": "^7.8.4",
     "@babel/core": "^7.8.4",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/plugin-transform-runtime": "^7.8.3",
     "@babel/preset-env": "^7.8.4",
-    "@babel/preset-react": "^7.8.3",
-    "autoprefixer": "^9.7.4",
     "babel-loader": "^8.0.6",
-    "css-loader": "^3.4.2",
-    "file-loader": "^5.0.2",
     "html-webpack-plugin": "^3.2.0",
-    "mini-css-extract-plugin": "^0.9.0",
-    "node-sass": "^4.13.1",
     "nodemon": "^2.0.2",
-    "postcss-cli": "^7.1.0",
-    "postcss-import": "^12.0.1",
-    "postcss-loader": "^3.0.0",
-    "postcss-svgo": "^4.0.2",
-    "sass-loader": "^8.0.2",
-    "tailwindcss": "^1.2.0",
-    "tailwindcss-transitions": "^2.2.0",
+    "npm-run-all": "^4.1.5",
+    "terser-webpack-plugin": "^2.3.4",
     "webpack": "^4.41.5",
     "webpack-cli": "^3.3.10",
-    "webpack-dev-server": "^3.10.3"
+    "webpack-shell-plugin": "^0.5.0"
   },
   "dependencies": {
     "@babel/runtime": "^7.8.4",
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.19.0",
+    "chalk": "^3.0.0",
+    "commander": "^4.1.1",
+    "concurrently": "^5.1.0",
+    "cookie-session": "^1.4.0",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
-    "highlight.js": "^9.18.1",
-    "react": "^16.12.0",
-    "react-dom": "^16.12.0",
-    "react-router": "^5.1.2",
-    "react-router-config": "^5.1.1",
-    "react-router-dom": "^5.1.2"
+    "express": "^4.17.1",
+    "jsonwebtoken": "^8.5.1",
+    "path-parser": "^6.1.0",
+    "pm2": "^4.2.3",
+    "the_launch-mysql-layer": "^1.0.1"
   }
 }

@@ -1,7 +1,7 @@
 const webpack = require('webpack')
-const WebpackShellPlugin = require('webpack-shell-plugin')
 const path = require('path')
 const fs = require('fs')
+const TerserPlugin = require('terser-webpack-plugin')
 
 const nodeModules = {}
 fs.readdirSync('node_modules')
@@ -14,29 +14,31 @@ fs.readdirSync('node_modules')
 
 module.exports = {
   entry: './index.js',
-  mode: 'development',
+  mode: 'production',
   target: 'node',
-  watch: true,
-  watchOptions: {
-    aggregateTimeout: 200,
-    poll: 1000,
-  },
   output: {
     filename: 'index.js',
     path: path.resolve(__dirname, 'dist'),
   },
-  devServer: {
-    historyApiFallback: true,
-  },
   devtool: 'source-map',
+  plugins: [],
   resolve: {
     extensions: ['.js'],
+  },
+  watch: true,
+  optimization: {
+    mangleWasmImports: true,
+    removeAvailableModules: true,
+    splitChunks: {
+      chunks: 'all',
+    },
+    minimize: true,
+    minimizer: [new TerserPlugin()],
   },
   module: {
     rules: [
       {
         test: /\.js$/,
-        exclude: /node_modules/,
         use: {
           loader: 'babel-loader',
         },
@@ -44,5 +46,4 @@ module.exports = {
     ],
   },
   externals: nodeModules,
-  plugins: [new WebpackShellPlugin({ onBuildEnd: ['nodemon dist/index.js --watch build'] })],
 }

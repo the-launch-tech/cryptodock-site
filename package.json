@@ -14,7 +14,13 @@
     "d:client": "npm run dev --prefix ./client",
     "p:build-server": "webpack --config webpack.config.prod.js --watch",
     "p:server": "nodemon --watch dist --exec \"node dist/index.js\"",
-    "p:client": "npm run prod --prefix ./client"
+    "p:client": "npm run prod --prefix ./client",
+    "build": "export NODE_ENV=production&&  npm-run-all --parallel b:*",
+    "b:server": "webpack --config webpack.config.prod.js",
+    "b:client": "npm run build --prefix ./client",
+    "start": "export NODE_ENV=production&&  npm-run-all --parallel s:*",
+    "s:server": "nodemon --watch dist --exec \"node dist/index.js\"",
+    "s:client": "npm run start --prefix ./client"
   },
   "repository": {
     "type": "git",

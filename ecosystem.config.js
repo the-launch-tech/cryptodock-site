@@ -2,7 +2,7 @@ module.exports = {
   apps: [
     {
       name: 'cryptodock',
-      script: 'npm run dev',
+      script: 'npm run start',
       watch: true,
     },
   ],

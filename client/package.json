@@ -15,7 +15,7 @@
     "build": "export NODE_ENV=production && npm-run-all --parallel b:*",
     "b:dist": "webpack --config webpack.config.dist.prod.js",
     "b:public": "webpack --config webpack.config.public.prod.js",
-    "start": "export NODE_ENV=production && nodemon --watch dist --exec \"node dist/server.js\""
+    "start": "export NODE_ENV=development && nodemon --watch dist --exec \"node dist/server.js\""
   },
   "repository": {
     "type": "git",

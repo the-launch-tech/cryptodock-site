@@ -1,4 +1,6 @@
-export default ({ title, body, helmet }) => `
+import serialize from 'serialize-javascript'
+
+export default ({ title, body, helmet, preFetch }) => `
   <!DOCTYPE html>
   <html>
     <head>
@@ -18,6 +20,9 @@ export default ({ title, body, helmet }) => `
     </head>
     <body>
       <div id="cryptodock">${body}</div>
+      <script>
+        window.PREFETCH = ${serialize(preFetch)}
+      </script>
     </body>
     <script src="client.js"></script>
   </html>

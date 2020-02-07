@@ -6,10 +6,12 @@ import express from 'express'
 import path from 'path'
 import React from 'react'
 import ReactDOMServer from 'react-dom/server'
+import { StaticRouter, matchPath } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import proxy from 'express-http-proxy'
 import App from './App'
 import html from './html'
+import routes from './routes'
 
 const { log, error } = console
 const { NODE_ENV, HOST, PORT, SERVER_PORT, DEV_HOST, DEV_SERVER_PORT, DEV_PORT } = process.env
@@ -36,22 +38,33 @@ app.use(
 app.use(express.static('public'))
 
 app.get('*', (req, res) => {
-  const context = {}
-  const jsx = <App />
-  const body = ReactDOMServer.renderToString(jsx)
-  const title = 'CryptoDock'
-  const helmet = Helmet.renderStatic()
-  const content = html({ title, body, helmet })
+  const preFetch = routes
+    .filter(route => matchPath(req.url, route))
+    .filter(route => route.loadData)
+    .map(route => route.loadData())
 
-  if (context.url) {
-    return res.redirect(301, context.url)
-  }
+  Promise.all(preFetch).then(preFetch => {
+    const context = {}
+    const jsx = (
+      <StaticRouter context={context} location={req.url}>
+        <App preFetch={preFetch} />
+      </StaticRouter>
+    )
+    const body = ReactDOMServer.renderToString(jsx)
+    const title = 'CryptoDock'
+    const helmet = Helmet.renderStatic()
+    const content = html({ title, body, helmet, preFetch })
 
-  if (context.notFound) {
-    res.status(404)
-  }
+    if (context.url) {
+      return res.redirect(301, context.url)
+    }
 
-  res.send(content)
+    if (context.notFound) {
+      res.status(404)
+    }
+
+    res.send(content)
+  })
 })
 
 http.listen(vars.port, () => log('Served Client'))

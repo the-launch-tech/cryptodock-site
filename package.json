@@ -7,14 +7,14 @@
     "cryptodock": "bin/index.js"
   },
   "scripts": {
-    "dev": "export NODE_ENV=development&&  npm-run-all --parallel development:*",
-    "prod": "export NODE_ENV=production&&  npm-run-all --parallel production:*",
-    "development:build-server": "webpack --config webpack.config.js --watch",
-    "development:server": "nodemon --watch dist --exec \"node dist/index.js\"",
-    "development:client": "npm run development_client --prefix ./client",
-    "production:build-server": "webpack --config webpack.config.prod.js --watch",
-    "production:server": "nodemon --watch dist --exec \"node dist/index.js\"",
-    "production:client": "npm run production_client --prefix ./client"
+    "dev": "export NODE_ENV=development&&  npm-run-all --parallel d:*",
+    "prod": "export NODE_ENV=production&&  npm-run-all --parallel p:*",
+    "d:build-server": "webpack --config webpack.config.js --watch",
+    "d:server": "nodemon --watch dist --exec \"node dist/index.js\"",
+    "d:client": "npm run dev --prefix ./client",
+    "p:build-server": "webpack --config webpack.config.prod.js --watch",
+    "p:server": "nodemon --watch dist --exec \"node dist/index.js\"",
+    "p:client": "npm run prod --prefix ./client"
   },
   "repository": {
     "type": "git",

@@ -7,8 +7,7 @@ export default function footer(props) {
         <ul className="mt-6 flex justify-center items-center">
           <li className="mx-2 p-0">
             <a
-              href=""
-              target="_blank"
+              href="mailto:daniel@thelaunch.tech"
               className="flex flex-col justify-center items-center text-white text-tiny transition-all transition-200 hover:text-red-2 font-head"
             >
               <i className="fal fa-envelope bg-red-2 text-white  shadow-lg text-2xl p-2 items-center justify-center align-center rounded-full outline-none focus:outline-none inline-block text-center transition-all transition-200 hover:bg-white hover:text-red-2 mb-2"></i>{' '}
@@ -17,7 +16,7 @@ export default function footer(props) {
           </li>
           <li className="mx-2 p-0">
             <a
-              href=""
+              href="https://github.com/the-launch-tech"
               target="_blank"
               className="flex flex-col justify-center items-center text-white text-tiny transition-all transition-200 hover:text-red-2 font-head"
             >

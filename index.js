@@ -28,7 +28,7 @@ CryptoDock.use(bodyParser.urlencoded({ limit: '500mb', extended: false }))
 CryptoDock.use(bodyParser.raw({ limit: '500mb', inflate: true, parameterLimit: 100000 }))
 CryptoDock.use(cookieSession({ maxAge: 30 * 24 * 60 * 60 * 1000, keys: [SESSION] }))
 
-CryptoDock.get('/api/users/:id', (req, res) => {
+CryptoDock.get('/users/:id', (req, res) => {
   log('GET /users/:id')
 
   Connection.asyncQuery('SELECT * FROM users WHERE id=?', [req.query.id])
@@ -42,7 +42,7 @@ CryptoDock.get('/api/users/:id', (req, res) => {
     .catch(err => res.status(500).send({ msg: 'Error Getting User!' }))
 })
 
-CryptoDock.post('/api/users/register', (req, res) => {
+CryptoDock.post('/users/register', (req, res) => {
   log('POST /users/register')
 
   Connection.asyncQuery('SELECT email FROM users WHERE email=? LIMIT 1', [req.body.email])
@@ -72,7 +72,7 @@ CryptoDock.post('/api/users/register', (req, res) => {
     .catch(err => res.status(500).send({ message: err }))
 })
 
-CryptoDock.post('/api/users/login', (req, res) => {
+CryptoDock.post('/users/login', (req, res) => {
   log('POST /users/login')
 
   Connection.asyncQuery('SELECT * FROM users WHERE email=? LIMIT 1', [req.body.email]).then(
@@ -113,7 +113,7 @@ CryptoDock.post('/api/users/login', (req, res) => {
   )
 })
 
-CryptoDock.put('/api/users/update', (req, res) => {
+CryptoDock.put('/users/update', (req, res) => {
   log('UPDATE /users/update')
 
   let query = 'UPDATE users SET '
@@ -137,14 +137,14 @@ CryptoDock.put('/api/users/update', (req, res) => {
     .catch(err => res.status(500).send({ message: 'Error Updating User' }))
 })
 
-CryptoDock.post('/api/users/logout', (req, res) => {
+CryptoDock.post('/users/logout', (req, res) => {
   log('POST /users/logout')
 
   if (req.user) req.logout()
   res.redirect(req.get('referer'))
 })
 
-CryptoDock.delete('/api/users/delete/:id', (req, res) => {
+CryptoDock.delete('/users/delete/:id', (req, res) => {
   log('DELETE /users/delete')
 
   Connection.asyncQuery('DELETE FROM users WHERE id=?', [req.query.id])

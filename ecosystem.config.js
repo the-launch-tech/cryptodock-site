@@ -3,7 +3,6 @@ module.exports = {
     {
       name: 'cryptodock',
       script: 'npm run prod',
-      cwd: '/cryptodock/dist',
       exec_mode: 'cluster',
       instances: 'max',
       watch: true,

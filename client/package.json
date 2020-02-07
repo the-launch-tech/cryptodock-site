@@ -4,18 +4,18 @@
   "description": "Site for Cryptodock",
   "main": "dist/server.js",
   "scripts": {
-    "dev": "export NODE_ENV=development&&  npm-run-all --parallel d:*",
+    "dev": "export NODE_ENV=development && npm-run-all --parallel d:*",
     "d:dist": "webpack --config webpack.config.dist.js --watch",
     "d:public": "webpack --config webpack.config.public.js --watch",
     "d:start": "nodemon --watch build --exec \"node dist/server.js\"",
-    "prod": "export NODE_ENV=production&&  npm-run-all --parallel p:*",
+    "prod": "export NODE_ENV=production && npm-run-all --parallel p:*",
     "p:dist": "webpack --config webpack.config.dist.prod.js --watch",
     "p:public": "webpack --config webpack.config.public.prod.js --watch",
     "p:start": "nodemon --watch dist --exec \"node dist/server.js\"",
-    "build": "export NODE_ENV=production&&  npm-run-all --parallel b:*",
+    "build": "export NODE_ENV=production && npm-run-all --parallel b:*",
     "b:dist": "webpack --config webpack.config.dist.prod.js",
     "b:public": "webpack --config webpack.config.public.prod.js",
-    "start": "export NODE_ENV=production&&  nodemon --watch dist --exec \"node dist/server.js\""
+    "start": "export NODE_ENV=production && nodemon --watch dist --exec \"node dist/server.js\""
   },
   "repository": {
     "type": "git",

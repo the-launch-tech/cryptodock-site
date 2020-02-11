@@ -5,7 +5,7 @@ CREATE TABLE IF NOT EXISTS users
     last_name VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
-    key VARCHAR(255) NOT NULL,
+    access_key VARCHAR(255),
     created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     PRIMARY KEY (id)
   );

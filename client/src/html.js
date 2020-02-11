@@ -1,6 +1,6 @@
 import serialize from 'serialize-javascript'
 
-export default ({ title, body, helmet, preFetch }) => `
+export default ({ title, body, helmet, store }) => `
   <!DOCTYPE html>
   <html>
     <head>
@@ -21,7 +21,7 @@ export default ({ title, body, helmet, preFetch }) => `
     <body>
       <div id="cryptodock">${body}</div>
       <script>
-        window.PREFETCH = ${serialize(preFetch)}
+        window.INITIAL_STATE = ${serialize(store.getState())}
       </script>
     </body>
     <script src="client.js"></script>

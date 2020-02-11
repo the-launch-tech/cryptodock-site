@@ -9,19 +9,15 @@ import ReactDOMServer from 'react-dom/server'
 import { StaticRouter, matchPath } from 'react-router-dom'
 import { Helmet } from 'react-helmet'
 import proxy from 'express-http-proxy'
-import App from './App'
+import { Provider } from 'react-redux'
+import App from './client/App'
 import html from './html'
 import routes from './routes'
+import getVars from './client/utils/getVars'
+import createStore from './helpers/createStore'
 
 const { log, error } = console
-const { NODE_ENV, HOST, PORT, SERVER_PORT, DEV_HOST, DEV_SERVER_PORT, DEV_PORT } = process.env
-
-const vars = {
-  host: NODE_ENV === 'development' ? DEV_HOST : HOST,
-  srvport: NODE_ENV === 'development' ? DEV_SERVER_PORT : SERVER_PORT,
-  port: NODE_ENV === 'development' ? DEV_PORT : PORT,
-}
-
+const vars = getVars()
 const app = express()
 const http = require('http').createServer(app)
 
@@ -37,23 +33,31 @@ app.use(
 
 app.use(express.static('public'))
 
-app.get('*', (req, res) => {
-  const preFetch = routes
-    .filter(route => matchPath(req.url, route))
-    .filter(route => route.loadData)
-    .map(route => route.loadData())
+app.get('*', async (req, res) => {
+  const store = createStore(req)
 
-  Promise.all(preFetch).then(preFetch => {
+  const promises = await Promise.all(
+    routes
+      .filter(route => matchPath(req.url, route))
+      .filter(route => route.loadData)
+      .map(route => route.loadData(store, req.path))
+  )
+
+  try {
     const context = {}
+
     const jsx = (
-      <StaticRouter context={context} location={req.url}>
-        <App preFetch={preFetch} />
-      </StaticRouter>
+      <Provider store={store}>
+        <StaticRouter context={context} location={req.url}>
+          <App />
+        </StaticRouter>
+      </Provider>
     )
+
     const body = ReactDOMServer.renderToString(jsx)
     const title = 'CryptoDock'
     const helmet = Helmet.renderStatic()
-    const content = html({ title, body, helmet, preFetch })
+    const content = html({ title, body, helmet, store })
 
     if (context.url) {
       return res.redirect(301, context.url)
@@ -64,7 +68,9 @@ app.get('*', (req, res) => {
     }
 
     res.send(content)
-  })
+  } catch (err) {
+    throw err
+  }
 })
 
 http.listen(vars.port, () => log('Served Client'))

@@ -10,49 +10,57 @@ export default class User {
     this.delete = this.delete.bind(this)
   }
 
-  single({ key, value }, callback) {
-    this.Conn.asyncQuery(
-      'SELECT id, first_name, last_name, email, access_key, password, created FROM users WHERE ' +
-        key +
-        '=? LIMIT 1',
-      [value]
-    )
-      .then(data => callback(false, data[0]))
-      .catch(error => callback(error, false))
-  }
-
-  save({ first_name, last_name, email }, pw, callback) {
-    this.Conn.asyncQuery(
-      'INSERT INTO users (first_name, last_name, email, password) values (?,?,?,?)',
-      [first_name, last_name, email, pw]
-    )
-      .then(data => callback(false, data.insertId))
-      .catch(error => callback(error, false))
-  }
-
-  update(id, fields, callback) {
-    let query = 'UPDATE users SET '
-    let bindings = []
-
-    Object.keys(fields).map((key, i) => {
-      bindings.push(fields[key])
-      query += ' ' + key + '=? '
-      if (i >= Object.keys(fields).length - 1) {
-        query += ', '
-      }
+  single({ key, value }) {
+    return new Promise((resolve, reject) => {
+      this.Conn.asyncQuery(
+        'SELECT id, first_name, last_name, email, access_key, password, created FROM users WHERE ' +
+          key +
+          '=? LIMIT 1',
+        [value]
+      )
+        .then(data => resolve(data[0]))
+        .catch(error => reject(error))
     })
-
-    query += 'WHERE id=?'
-    bindings.push(id)
-
-    this.Conn.asyncQuery(query, bindings)
-      .then(data => callback(false, data))
-      .catch(error => callback(error, false))
   }
 
-  delete(id, callback) {
-    this.Conn.asyncQuery('DELETE FROM users WHERE id=?', [id])
-      .then(data => callback(false, data))
-      .catch(error => callback(error, false))
+  save({ first_name, last_name, email }, pw) {
+    return new Promise((resolve, reject) => {
+      this.Conn.asyncQuery(
+        'INSERT INTO users (first_name, last_name, email, password) values (?,?,?,?)',
+        [first_name, last_name, email, pw]
+      )
+        .then(data => resolve(data.insertId))
+        .catch(error => reject(error))
+    })
+  }
+
+  update(id, fields) {
+    return new Promise((resolve, reject) => {
+      let query = 'UPDATE users SET '
+      let bindings = []
+
+      Object.keys(fields).map((key, i) => {
+        bindings.push(fields[key])
+        query += ' ' + key + '=? '
+        if (i >= Object.keys(fields).length - 1) {
+          query += ', '
+        }
+      })
+
+      query += 'WHERE id=?'
+      bindings.push(id)
+
+      this.Conn.asyncQuery(query, bindings)
+        .then(data => resolve(data))
+        .catch(error => reject(error))
+    })
+  }
+
+  delete(id) {
+    return new Promise((resolve, reject) => {
+      this.Conn.asyncQuery('DELETE FROM users WHERE id=?', [id])
+        .then(data => resolve(data))
+        .catch(error => reject(error))
+    })
   }
 }

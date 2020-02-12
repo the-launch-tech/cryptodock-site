@@ -16,23 +16,21 @@ let set = false
 
 function App({ route, getCurrentUser, setUser, logoutUser, location, auth }) {
   useEffect(() => {
-    if (!localStorage.jwtToken) {
+    if (!localStorage.cryptodockJwt) {
       getCurrentUser()
     }
   })
 
   if (typeof window !== 'undefined') {
-    if (localStorage.jwtToken && !set) {
-      setAuthToken(localStorage.jwtToken)
-      const decoded = jwt_decode(localStorage.jwtToken)
+    if (localStorage.cryptodockJwt && !set) {
+      setAuthToken(localStorage.cryptodockJwt)
+      const decoded = jwt_decode(localStorage.cryptodockJwt)
       setUser(decoded)
-      if (setAuthToken.exp < Date.now() / 1000) {
+      if (decoded.expires < Date.now() / 1000) {
         logoutUser()
       }
       set = true
     }
-
-    log('localStorage.jwtToken', localStorage.jwtToken, auth)
   }
 
   return (

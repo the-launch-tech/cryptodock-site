@@ -7,7 +7,7 @@ export default () => {
     DB_PASSWORD,
     PORT,
     HOST,
-    SESSION,
+    SECRET,
     DEV_PORT,
     DEV_HOST,
   } = process.env
@@ -17,7 +17,7 @@ export default () => {
     DB_USER,
     DB_HOST,
     DB_PASSWORD,
-    SESSION,
+    SECRET,
     PORT: NODE_ENV === 'development' ? DEV_PORT : PORT,
     HOST: NODE_ENV === 'development' ? DEV_HOST : HOST,
   }

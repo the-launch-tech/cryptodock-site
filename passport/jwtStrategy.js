@@ -5,21 +5,20 @@ const { log, error } = console
 export default passport => {
   log('jwt')
 
-  return passport.use(
+  passport.use(
     new JwtStrategy(
       {
-        jwtFromRequest: ExtractJwt.fromAuthHeaderAsBearerToken(),
-        secretOrKey: 'secret',
+        jwtFromRequest: req => req.cookies.cryptodockJwt,
+        secretOrKey: process.env.SECRET,
       },
       (jwtPayload, done) => {
         log('jwtPayload', jwtPayload)
-        return global.User.single({ key: 'id', value: jwtPayload.id }, (err, data) => {
-          if (error) {
-            return done(err)
-          }
-          log(user)
-          return done(null, user)
-        })
+
+        if (Date.now() > jwtPayload.expires) {
+          return done('EXPIRED')
+        }
+
+        return done(null, jwtPayload)
       }
     )
   )

@@ -1,4 +1,5 @@
 import isLoggedIn from '../middleware/isLoggedIn'
+import verifyToken from '../middleware/verifyToken'
 import registerUser from '../controllers/users/register'
 import loginUser from '../controllers/users/login'
 import logoutUser from '../controllers/users/logout'
@@ -15,8 +16,8 @@ export default (CryptoDock, authed) => {
   CryptoDock.post('/api/users/register', registerUser)
   CryptoDock.post('/api/users/login', loginUser)
   CryptoDock.get('/api/users/logout', logoutUser)
-  CryptoDock.get('/api/users/current', authed.authToken, getCurrentUser)
-  CryptoDock.get('/api/users/:id', authed.authToken, getSingleUser)
-  CryptoDock.put('/api/users/:id', authed.authToken, updateUser)
-  CryptoDock.delete('/api/users/:id', authed.authToken, deleteUser)
+  CryptoDock.get('/api/users/current', getCurrentUser)
+  CryptoDock.get('/api/users/:id', verifyToken, getSingleUser)
+  CryptoDock.put('/api/users/:id', updateUser)
+  CryptoDock.delete('/api/users/:id', deleteUser)
 }

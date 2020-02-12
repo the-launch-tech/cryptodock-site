@@ -6,7 +6,7 @@ import { GET_CURRENT_USER, SET_USER, GET_AUTH_ERRORS, GET_USER } from './types'
 const { log, error } = console
 
 export const getCurrentUser = () => async (dispatch, getState, api) => {
-  if (!localStorage.jwtToken) {
+  if (!localStorage.cryptodockJwt) {
     api
       .get(`/users/current`)
       .then(({ data }) => dispatch({ type: GET_CURRENT_USER, payload: data }))
@@ -50,7 +50,7 @@ export const loginUser = user => async (dispatch, getState, api) => {
       log('loging data', data)
       const { token } = data
       const decoded = jwt_decode(token)
-      localStorage.setItem('jwtToken', token)
+      localStorage.setItem('cryptodockJwt', token)
       setAuthToken(token)
       setUser(decoded)
       window.location.href = 'http://localhost:3000'
@@ -58,13 +58,13 @@ export const loginUser = user => async (dispatch, getState, api) => {
     .catch(e => dispatch({ type: GET_AUTH_ERRORS, payload: e }))
 }
 
-export const setUser = user => async (dispatch, getState, api) => {
+export const setUser = ({ user }) => async (dispatch, getState, api) => {
   dispatch({ type: SET_USER, payload: user })
 }
 
 export const logoutUser = () => async (dispatch, getState, api) => {
-  if (localStorage.jwtToken) {
-    localStorage.removeItem('jwtToken')
+  if (localStorage.cryptodockJwt) {
+    localStorage.removeItem('cryptodockJwt')
     setAuthToken(false)
     setUser({})
     window.location.href = 'http://localhost:3000'

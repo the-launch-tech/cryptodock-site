@@ -4,6 +4,6 @@ export default passport => {
   log('serializeUser')
 
   passport.serializeUser((user, done) => {
-    done(null, user.id)
+    return done(null, user.id)
   })
 }

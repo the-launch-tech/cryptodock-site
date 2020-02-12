@@ -2,38 +2,28 @@ import bcrypt from 'bcryptjs'
 
 const { log, error } = console
 
-export default (req, res) => {
-  log('POST /users/register', req.body)
+export default async (req, res) => {
+  log('POST /users/register', req.body, req.cookies)
 
-  global.User.single({ key: 'email', value: req.body.email }, (err, user) => {
-    log('single', err, user)
-    if (err) {
-      return res.status(400).json({ message: 'REGISTER_ERROR' })
-    } else if (user) {
+  const user = await global.User.single({ key: 'email', value: req.body.email })
+
+  try {
+    if (user) {
       return res.status(400).json({ message: 'USER_EXISTS' })
     } else {
-      log('salting')
       bcrypt.genSalt(10, (err, salt) => {
-        log(err, salt)
         if (!err) {
-          log('hashing')
           bcrypt.hash(req.body.password, salt, (err, pw) => {
-            log(err, pw)
             if (!err) {
-              log('saving')
               try {
-                global.User.save(req.body, pw, (err, id) => {
-                  log('global.User.save')
-                  if (err) {
-                    return res.status(400).json({ message: 'SAVE_ERROR' })
-                  } else {
+                global.User.save(req.body, pw)
+                  .then(id => {
                     const newUser = req.body
                     newUser.password = pw
                     newUser.id = id
-                    log('newUser', newUser)
                     return res.json(newUser)
-                  }
-                })
+                  })
+                  .catch(e => res.status(400).json({ message: 'SAVE_ERROR' }))
               } catch (err) {
                 return res.status(400).json({ message: 'SAVE_ERROR' })
               }
@@ -44,5 +34,7 @@ export default (req, res) => {
         }
       })
     }
-  })
+  } catch (err) {
+    res.status(400).json({ message: 'REGISTER_ERROR' })
+  }
 }

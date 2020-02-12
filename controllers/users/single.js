@@ -1,13 +1,17 @@
 const { log, error } = console
 
-export default (req, res) => {
+export default async (req, res) => {
   log('GET /users/:id', req.params)
 
-  global.User.single({ key: 'id', value: req.params.id }, (err, data) => {
-    if (err || !data) {
-      res.status(500).send({ msg: 'USER_NOT_FOUND' })
+  const data = await global.User.single({ key: 'id', value: req.params.id })
+
+  try {
+    if (!data) {
+      return res.status(500).send({ msg: 'USER_NOT_FOUND' })
     } else {
-      res.status(200).json(data)
+      return res.status(200).json(data)
     }
-  })
+  } catch (err) {
+    res.status(500).send({ msg: 'USER_NOT_FOUND' })
+  }
 }

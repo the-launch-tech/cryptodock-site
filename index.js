@@ -13,7 +13,7 @@ import auth from './passport/auth'
 
 const { log, error } = console
 
-const { NODE_ENV, PORT, HOST, DB_NAME, DB_USER, DB_HOST, DB_PASSWORD } = getVars()
+const { NODE_ENV, PORT, HOST, DB_NAME, DB_USER, DB_HOST, DB_PASSWORD, SECRET } = getVars()
 
 const CryptoDock = express()
 
@@ -34,7 +34,7 @@ CryptoDock.use(bodyParser.urlencoded({ limit: '500mb', extended: false }))
 CryptoDock.use(bodyParser.raw({ limit: '500mb', inflate: true, parameterLimit: 100000 }))
 CryptoDock.use(cookieParser())
 CryptoDock.use(setHeaders)
-CryptoDock.use(cookieSession({ maxAge: 30 * 24 * 60 * 60 * 1000, keys: ['secret'] }))
+CryptoDock.use(cookieSession({ maxAge: 30 * 24 * 60 * 60 * 1000, keys: [SECRET] }))
 CryptoDock.use(authed.initialize())
 CryptoDock.use(authed.session())
 

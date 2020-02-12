@@ -14,20 +14,20 @@ export default passport => {
         passwordField: 'password',
         passReqToCallback: true,
       },
-      (req, email, password, done) => {
-        global.User.single({ key: 'email', value: email }, (err, user) => {
-          if (err) {
-            return done(err)
-          } else if (user) {
-            bcrypt.compare(password, user.password).then(match => {
-              if (match) {
-                return done(null, user)
-              } else {
-                return done(err)
-              }
-            })
+      async (req, email, password, done) => {
+        const user = await global.User.single({ key: 'email', value: email })
+
+        const match = await bcrypt.compare(password, user.password)
+
+        try {
+          if (match) {
+            return done(null, user)
+          } else {
+            return done('BAD_CREDS')
           }
-        })
+        } catch (err) {
+          done(err)
+        }
       }
     )
   )

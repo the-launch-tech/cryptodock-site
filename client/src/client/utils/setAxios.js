@@ -4,11 +4,11 @@ export default {
   server: req => {
     const headers = {
       'Content-Type': 'application/json',
-      cookie: req.get('cookie') || '',
+      cookie: req.cookies ? req.cookies.cryptodockJwt : '',
     }
 
     if (global.localStorage) {
-      headers['Authorization'] = global.localStorage.jwtToken
+      headers['Authorization'] = global.localStorage.cryptodockJwt
     }
 
     return axios.create({
@@ -23,7 +23,7 @@ export default {
     }
 
     if (localStorage) {
-      headers['Authorization'] = localStorage.jwtToken
+      headers['Authorization'] = localStorage.cryptodockJwt
     }
 
     return axios.create({
